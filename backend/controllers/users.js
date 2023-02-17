@@ -20,7 +20,8 @@ const login = (req, res, next) => {
         'jwt',
         token,
         { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true },
-      ).send({ token });
+      )
+        .send({ token });
     })
     .catch(next);
 };
@@ -40,7 +41,7 @@ const getСurrentUser = (req, res, next) => {
       if (!user) {
         next(new NotFoundError('Текущий пользователь не найден'));
       } else {
-        res.status(NO_ERRORS).send({ data: user });
+        res.status(NO_ERRORS).send(user);
       }
     })
     .catch(next);
@@ -52,7 +53,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       } else {
-        res.status(NO_ERRORS).send({ data: user });
+        res.status(NO_ERRORS).send(user);
       }
     })
     .catch((err) => {
@@ -98,7 +99,7 @@ const updateUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь с указанным _id не найден');
       } else {
-        res.status(NO_ERRORS).send({ data: user });
+        res.status(NO_ERRORS).send(user);
       }
     })
     .catch((err) => {
@@ -117,7 +118,7 @@ const updateAvatar = (req, res, next) => {
       if (!user) {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
       }
-      res.status(NO_ERRORS).send({ data: user });
+      res.status(NO_ERRORS).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {

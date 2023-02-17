@@ -1,9 +1,7 @@
 const apiOptions = {
-    baseUrl: "https://mesto.nomoreparties.co/v1/cohort-52",
-    baseUrlAuth: "https://auth.nomoreparties.co",
+    baseUrl: "http://localhost:3001",
     headers: {
-        authorization: 'eedc1c72-62bc-4062-b0d7-5fb34f1900fa',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     },
 
 }
@@ -12,8 +10,6 @@ class Api {
     constructor(config) {
         this._header = config.headers;
         this._baseUrl = config.baseUrl;
-        this._baseUrlAuth = config.baseUrlAuth;
-
     }
 
     _getJsonOrError(res) {
@@ -24,7 +20,7 @@ class Api {
     }
 
     register(newEmail, newPassword) { 
-        return fetch(`${this._baseUrlAuth}/signup`, {
+        return fetch(`${this._baseUrl}/signup`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -39,8 +35,9 @@ class Api {
     }
 
     logIn(emailIn, passwordIn) {
-        return fetch(`${this._baseUrlAuth}/signin`, {
+        return fetch(`${this._baseUrl}/signin`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -54,11 +51,11 @@ class Api {
     }
 
     getProfileInfo() {
-        return fetch(`${this._baseUrlAuth}/users/me`, {
+        return fetch(`${this._baseUrl}/users/me`, {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem('jwt')}`
             },
         })
             .then(this._getJsonOrError)
@@ -66,6 +63,7 @@ class Api {
 
     getUserInfo() {
         return fetch(`${this._baseUrl}/users/me`, {
+            credentials: 'include',
             headers: this._header,
         })
             .then(this._getJsonOrError)
@@ -74,6 +72,7 @@ class Api {
     setUserInfo(newName, newAbout) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
+            credentials: 'include',
             headers: this._header,
             body: JSON.stringify({
                 name: `${newName}`,
@@ -85,6 +84,7 @@ class Api {
 
     getCards() {
         return fetch(`${this._baseUrl}/cards`, {
+            credentials: 'include',
             headers: this._header,
         })
             .then(this._getJsonOrError)
@@ -93,6 +93,7 @@ class Api {
     createNewCard(newName, newLink) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'POST',
+            credentials: 'include',
             headers: this._header,
             body: JSON.stringify({
                 name: `${newName}`,
@@ -107,6 +108,7 @@ class Api {
     deleteCard(id) {
         return fetch(`${this._baseUrl}/cards/${id}`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: this._header,
         })
             .then(this._getJsonOrError)
@@ -116,6 +118,7 @@ class Api {
         if (isLiked) {
             return fetch(`${this._baseUrl}/cards/${id}/likes`, {
                 method: 'PUT',
+                credentials: 'include',
                 headers: this._header,
             })
                 .then(this._getJsonOrError)
@@ -131,6 +134,7 @@ class Api {
     submitAvatar(link) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: 'PATCH',
+            credentials: 'include',
             headers: this._header,
             body: JSON.stringify({
                 avatar: `${link}`

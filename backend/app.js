@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
@@ -27,7 +27,8 @@ const { PORT = 3000 } = process.env;
 const allowedCors = [
   'https://dmbelozerov.nomoredomainsclub.ru',
   'http://dmbelozerov.nomoredomainsclub.ru',
-  'localhost:3000',
+  'http://localhost:3000',
+  'http://localhost:3001',
 ];
 
 const limiter = rateLimit({
@@ -42,11 +43,16 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use(helmet());
 app.use(limiter);
-app.use(cors());
+// app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(requestLogger);
+
+app.use(function (req, res, next) {
+  console.log(req.headers);
+  next();
+});
 
 app.use(function (req, res, next) {
   const { origin } = req.headers;
@@ -55,6 +61,7 @@ app.use(function (req, res, next) {
   const requestHeaders = req.headers['access-control-request-headers'];
   if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', true);
   }
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);

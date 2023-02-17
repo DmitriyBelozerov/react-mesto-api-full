@@ -8,7 +8,7 @@ const NO_ERRORS = 200;
 const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
-      res.status(NO_ERRORS).send({ data: cards });
+      res.status(NO_ERRORS).send(cards);
     })
     .catch(next);
 };

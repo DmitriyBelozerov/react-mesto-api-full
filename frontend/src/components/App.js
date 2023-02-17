@@ -44,6 +44,7 @@ function App() {
         .catch(err => console.log(err))
       api.getUserInfo()
         .then(data => {
+          console.log(data);
           setCurrentUser(data);
         })
         .catch(err => console.log(err))
@@ -159,12 +160,12 @@ function App() {
     api.logIn(email, password)
       .then((data) => {
         setLoggedIn(true);
-        if (data.token) {
-          localStorage.setItem("jwt", data.token);
-          return data;
-        } else {
-          return;
-        }
+        // if (data.token) {
+        //   localStorage.setItem("jwt", data.token);
+        //   return data;
+        // } else {
+        //   return;
+        // }
       })
       .then(() => {
         history.push('/');
