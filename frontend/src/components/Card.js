@@ -2,29 +2,24 @@ import React from "react";
 import { TranslationContext } from "../contexts/CurrentUserContext";
 
 
-function Card({ card, onCardClick,  onCardLike, onCardDelete}) {
+function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     const currentUser = React.useContext(TranslationContext);
 
-    const isOwn = card.owner === currentUser.data._id;
-    const cardDeleteButtonClassName = (
-        `card__delete ${!isOwn && 'card__delete_hidden'}`
-    );
+    const isOwn = card.owner === currentUser._id;
+    const cardDeleteButtonClassName = (`card__delete ${!isOwn && 'card__delete_hidden'}`);
 
-console.log(currentUser.data._id);
-
-    const isLiked = card.likes.some(i => i === currentUser.data._id);
+    const isLiked = card.likes.some(i => i === currentUser._id);
     const cardLikeButtonClassName = `card__like ${isLiked && 'card__like_active'}`;
-
 
     function handleClick() {
         onCardClick(card);
     }
 
-    function handleLikeClick(){
+    function handleLikeClick() {
         onCardLike(card);
     }
 
-    function handleDeleteClick(){
+    function handleDeleteClick() {
         onCardDelete(card);
     }
 

@@ -3,4 +3,6 @@
   
 Пожалуйста, прикрепите в это описание ссылку на сайт, размещенный на Яндекс.Облаке.
 
-РЕДАКТИРОВАТЬ
+IP  130.193.55.141
+Frontend  https://dmbelozerov.nomoredomainsclub.ru
+Backend  https://api.domainname.students.nomoredomainsclub.ru

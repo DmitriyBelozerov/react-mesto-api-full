@@ -44,8 +44,7 @@ function App() {
         .catch(err => console.log(err))
       api.getUserInfo()
         .then(data => {
-          console.log(data);
-          setCurrentUser(data);
+          setCurrentUser(data.data);
         })
         .catch(err => console.log(err))
     } else {
@@ -64,10 +63,11 @@ function App() {
   }, [history])
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(i => i === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
-        setCards(state => state.map(c => c._id === card._id ? newCard : c));
+
+        setCards(state => state.map(c => c._id === card._id ? newCard.data : c));
       })
       .catch(err => console.log(err))
   }
@@ -125,7 +125,7 @@ function App() {
   function handleUpdateUser({ name, about }) {
     api.setUserInfo(name, about)
       .then(data => {
-        setCurrentUser(data);
+        setCurrentUser(data.data);
       })
       .then(() => {
         closeAllPopups();
@@ -136,7 +136,7 @@ function App() {
   function handleUpdateAvatar(link) {
     api.submitAvatar(link)
       .then(data => {
-        setCurrentUser(data);
+        setCurrentUser(data.data);
       })
       .then(() => {
         closeAllPopups();
@@ -147,7 +147,7 @@ function App() {
   function handleAddPlaceSubmit({ title, link }) {
     api.createNewCard(title, link)
       .then(newCard => {
-        setCards([newCard, ...cards]);
+        setCards([newCard.data, ...cards]);
       })
       .then(() => {
         closeAllPopups();
@@ -160,12 +160,12 @@ function App() {
     api.logIn(email, password)
       .then((data) => {
         setLoggedIn(true);
-        // if (data.token) {
-        //   localStorage.setItem("jwt", data.token);
-        //   return data;
-        // } else {
-        //   return;
-        // }
+        if (data.token) {
+          localStorage.setItem("jwt", data.token);
+          return data;
+        } else {
+          return;
+        }
       })
       .then(() => {
         history.push('/');
@@ -185,7 +185,7 @@ function App() {
         setIsInfoTooltipTitle('Вы успешно зарегистрировались!');
         setIsInfoTooltipLogo(logoOk);
       })
-      .catch(()=> {
+      .catch(() => {
         setIsInfoTooltip(true);
         setIsInfoTooltipTitle('Что-то пошло не так! Попробуйте ещё раз.');
         setIsInfoTooltipLogo(logoErr);
@@ -194,8 +194,16 @@ function App() {
 
 
   function handleOut() {
-    setLoggedIn(false);
-    localStorage.removeItem("jwt");
+    api.logOut()
+      .then(() => {
+        setLoggedIn(false);
+        history.push('/sign-in');
+      })
+      .catch(() => {
+        setIsInfoTooltip(true);
+        setIsInfoTooltipTitle('Вы вышли. До скорых встреч!');
+        setIsInfoTooltipLogo(logoOk);
+      })
   }
 
   return (

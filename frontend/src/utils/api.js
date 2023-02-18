@@ -1,6 +1,7 @@
 const apiOptions = {
     baseUrl: "http://localhost:3000",
     headers: {
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
     },
 
@@ -19,7 +20,7 @@ class Api {
         throw new Error('Ошибка при загрузке данных с сервера')
     }
 
-    register(newEmail, newPassword) { 
+    register(newEmail, newPassword) {
         return fetch(`${this._baseUrl}/signup`, {
             method: 'POST',
             headers: {
@@ -46,6 +47,19 @@ class Api {
                 password: `${passwordIn}`,
                 email: `${emailIn}`
             }),
+        })
+            .then(this._getJsonOrError)
+    }
+
+    logOut() {
+        return fetch(`${this._baseUrl}/users/me`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+
         })
             .then(this._getJsonOrError)
     }
@@ -125,6 +139,7 @@ class Api {
         } else {
             return fetch(`${this._baseUrl}/cards/${id}/likes`, {
                 method: 'DELETE',
+                credentials: 'include',
                 headers: this._header,
             })
                 .then(this._getJsonOrError)

@@ -8,6 +8,7 @@ const {
 } = require('../controllers/cards');
 
 router.get('/', getCards);
+
 router.post(
   '/',
   celebrate({

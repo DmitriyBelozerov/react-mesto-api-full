@@ -1,5 +1,5 @@
+require('dotenv').config();
 const express = require('express');
-// const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
@@ -12,14 +12,11 @@ const app = express();
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const auth = require('./middlewares/auth');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const NotFoundError = require('./errors/not-found-err');
 
-const { requestLogger, errorLogger } = require('./middlewares/logger');
-
-const {
-  createUser, login,
-} = require('./controllers/users');
+const { createUser, login } = require('./controllers/users');
 
 const regEx = /(https?:\/\/)(w{3}\.)?([a-zA-Z0-9-]{0,100}\.)([a-zA-Z]{2,6})(\/[\w\-._~:/?#[\]@!$&'()*+,;=]#?)?/;
 const { PORT = 3000 } = process.env;
@@ -43,16 +40,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use(helmet());
 app.use(limiter);
-// app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(requestLogger);
-
-app.use(function (req, res, next) {
-  console.log(req.headers);
-  next();
-});
 
 app.use(function (req, res, next) {
   const { origin } = req.headers;
@@ -69,6 +60,12 @@ app.use(function (req, res, next) {
     return res.end();
   }
   next();
+});
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
 });
 
 app.post(

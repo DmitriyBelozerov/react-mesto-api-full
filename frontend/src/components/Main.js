@@ -4,7 +4,6 @@ import { TranslationContext } from "../contexts/CurrentUserContext";
 
 function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete }) {
     const currentUser = React.useContext(TranslationContext);
-// console.log(currentUser);
     return (
         <>
             <section className="profile">

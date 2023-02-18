@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 const NO_ERRORS = 200;
 const NotFoundError = require('../errors/not-found-err');
 const UniqueEmailError = require('../errors/unique-email-err');
@@ -13,7 +15,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        'secret-key',
+        NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
         { expiresIn: '7d' },
       );
       res.cookie(
@@ -26,6 +28,15 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
+const unLogin = (req, res, next) => {
+  try {
+    res.clearCookie('jwt');
+    res.end();
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
@@ -35,7 +46,6 @@ const getUsers = (req, res, next) => {
 };
 
 const getСurrentUser = (req, res, next) => {
-  console.log(req.user._id);
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
@@ -113,6 +123,7 @@ const updateUser = (req, res, next) => {
 
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
+  console.log(avatar);
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
@@ -130,5 +141,5 @@ const updateAvatar = (req, res, next) => {
 };
 
 module.exports = {
-  getUsers, getСurrentUser, getUserById, createUser, updateUser, updateAvatar, login,
+  getUsers, getСurrentUser, getUserById, createUser, updateUser, updateAvatar, login, unLogin,
 };
