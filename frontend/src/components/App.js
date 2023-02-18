@@ -66,7 +66,6 @@ function App() {
     const isLiked = card.likes.some(i => i === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
-
         setCards(state => state.map(c => c._id === card._id ? newCard.data : c));
       })
       .catch(err => console.log(err))
@@ -160,14 +159,8 @@ function App() {
     api.logIn(email, password)
       .then((data) => {
         setLoggedIn(true);
-        if (data.token) {
-          localStorage.setItem("jwt", data.token);
-          return data;
-        } else {
-          return;
-        }
-      })
-      .then(() => {
+        setCurrentUser(data.user);
+        setUserEmail(data.user.email);
         history.push('/');
       })
       .catch(() => {
@@ -200,9 +193,6 @@ function App() {
         history.push('/sign-in');
       })
       .catch(() => {
-        setIsInfoTooltip(true);
-        setIsInfoTooltipTitle('Вы вышли. До скорых встреч!');
-        setIsInfoTooltipLogo(logoOk);
       })
   }
 

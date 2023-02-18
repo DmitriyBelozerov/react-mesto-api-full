@@ -1,5 +1,5 @@
 const apiOptions = {
-    baseUrl: "https://api.domainname.students.nomoredomainsclub.ru",
+    baseUrl: "http://localhost:3000",
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

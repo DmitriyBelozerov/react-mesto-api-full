@@ -23,7 +23,7 @@ const login = (req, res, next) => {
         token,
         { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true },
       )
-        .send({ token });
+        .send({ user });
     })
     .catch(next);
 };
