@@ -123,13 +123,11 @@ const updateUser = (req, res, next) => {
 
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  console.log(avatar);
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
       }
-      console.log(user);
       res.status(NO_ERRORS).send({ data: user });
     })
     .catch((err) => {
