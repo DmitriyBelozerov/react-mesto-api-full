@@ -67,7 +67,7 @@ const getUserById = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         next(new ValidationError('Переданы некорректные данные при запросе пользователя'));
       } else {
         next(err);
@@ -129,6 +129,7 @@ const updateAvatar = (req, res, next) => {
       if (!user) {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
       }
+      console.log(user);
       res.status(NO_ERRORS).send({ data: user });
     })
     .catch((err) => {

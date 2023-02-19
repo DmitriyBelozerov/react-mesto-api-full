@@ -11,8 +11,9 @@
   },
   "rules": {
     "no-underscore-dangle": ["error", { "allow": ["_id"] }],
-    "no-console": "off",
+    "no-console": "warn",
     "func-names": "off",
-    "prefer-arrow-callback": "off"
+    "prefer-arrow-callback": "off",
+    "consistent-return": "off"
   }
 }
