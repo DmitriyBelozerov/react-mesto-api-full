@@ -209,9 +209,7 @@ function App() {
           <Switch>
 
             <Route path='/sign-up'>
-              <Register
-                onSubmit={register}
-              ></Register>
+              <Register onSubmit={register}></Register>
             </Route>
 
             <Route path='/sign-in'>
