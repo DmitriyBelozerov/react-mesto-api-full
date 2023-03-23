@@ -3,6 +3,6 @@
   
 Пожалуйста, прикрепите в это описание ссылку на сайт, размещенный на Яндекс.Облаке.
 
-IP  130.193.55.141
+IP  158.160.28.20
 Frontend  https://dmbelozerov.nomoredomainsclub.ru
 Backend  https://api.domainname.students.nomoredomainsclub.ru
